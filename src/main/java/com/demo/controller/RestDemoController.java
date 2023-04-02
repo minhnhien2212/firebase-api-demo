@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 @Controller
@@ -19,9 +20,14 @@ public class RestDemoController {
         return new User(name, "hnlinhtkdddd@gmail.com");
     }
 
+    // Em đang làm ở method này nè
     @PostMapping("createUser")
     public String postExample(@RequestBody User user) throws InterruptedException, ExecutionException {
-        return "Created User " + user.getName();
+        try {
+            return firebaseService.saveUserDetails(user);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PutMapping("updateUser")

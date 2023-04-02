@@ -8,6 +8,7 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -17,14 +18,12 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class FirebaseService {
 
+    @Autowired
+    private FirebaseInitialize firebaseInitialize;
 
     public String saveUserDetails(User user) throws ExecutionException, InterruptedException, IOException {
         // Initialize Firebase app
-        FileInputStream serviceAccount = new FileInputStream("./ServiceAccount.json");
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .build();
-        FirebaseApp.initializeApp(options);
+        firebaseInitialize.initialize();
 
         Firestore dbFirestore = FirestoreClient.getFirestore();
 
